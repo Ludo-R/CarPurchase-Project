@@ -8,8 +8,6 @@ Created on Mon Nov  2 10:31:04 2020
 from sqlalchemy import create_engine
 import pandas as pd
 import pymysql
-import time
-
 engine = create_engine("mysql+pymysql://root:sqlpwd@localhost/carpurchase")
 
 def chargement(link, table):
