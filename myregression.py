@@ -1,50 +1,39 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov  3 16:31:10 2020
+Created on Thu Nov  5 09:27:54 2020
 
 @author: randon
 """
-
-
-import numpy as np
 import matplotlib.pyplot as plt
 
-def model(X, theta):
-    return X.dot(theta)
 
-def cost_function(X,y,theta):
-    m = len(y)
-    return 1/(2*m) * np.sum((model(X, theta) - y)**2)
-
-def grad(X, y, theta):
-    m = len(y)
-    return 1/m * X.T.dot(model(X,theta) - y)
-
-def gradient_descent(X,y,theta, learning_rate, n_iterations):
-    cost_history = np.zeros(n_iterations)
-    for i in range(0, n_iterations):
-        theta = theta - learning_rate * grad(X, y, theta)
-        cost_history[i] = cost_function(X, y, theta)
-    return theta, cost_history
-
-def coef_determination(y, pred):
-    u = ((y - pred)** 2).sum()
-    v = ((y - y.mean())**2).sum()
-    return 1 - u/v
-
-def make_regression(x,y):  
-    x = x.reshape(x.shape[0],1)
-    y = y.reshape(y.shape[0],1)
-
-    X = np.hstack((x, np.ones(x.shape)))
-
-    theta = np.random.randn(2,1)
+def fit(x,y):
     
-    theta_final, cost_history = gradient_descent(X, y, theta, learning_rate=0.001, n_iterations=1000)
+    m = len(x)
+    slop = (m * (x*y).sum() - x.sum()*y.sum()) / (m*(x**2).sum() - (x.sum())**2)
+    inter = ((x**2).sum()*y.sum() - x.sum() * (x*y).sum()) / (m * (x**2).sum() - (x.sum())**2)
 
-    predictions = model(X, theta_final)
-    plt.scatter(x,y)
-    plt.plot(x, predictions, c='r')
+    return slop, inter
 
-    print(coef_determination(y, predictions))
+def predict(x, slop, inter):
+    return slop * x + inter
+
+def make_regression(x,y):
+    slop, inter = fit(x,y)
+    line = predict(x, slop, inter)
+
+    plt.grid()
+    plt.scatter(x, y)
+    plt.plot(x, line, c='r')
+    plt.show()
+
+def r2_show(x,y):
+    slop, inter = fit(x,y)
+    ya = predict(x, slop, inter)
+    yb = sum(y)/len(y)
+    SST = sum((y- yb)**2)
+    SSreg = sum((ya - yb)**2)
+
+    R2 = SSreg/SST
+    print("R2 : %s" % R2)
