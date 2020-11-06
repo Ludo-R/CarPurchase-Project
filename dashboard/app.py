@@ -48,10 +48,20 @@ pred2 = line2.predict(x2)
 fig=go.Figure()
 fig.add_trace(go.Scatter(name='Values', x=df["Present_Price"], y=df["Selling_Price"], mode='markers'))
 fig.add_trace(go.Scatter(name='Regression', x=df["Present_Price"], y=pred, mode='lines'))
+fig.update_layout(title='Linear regression',
+                  yaxis_zeroline=False, xaxis_zeroline=False)
+fig.update_xaxes(title_text="Present_Price")
+fig.update_yaxes(title_text="Selling_Price")
 
 fig2=go.Figure()
 fig2.add_trace(go.Scatter(name='Values', x=df["Year"], y=df["Selling_Price"], mode='markers'))
 fig2.add_trace(go.Scatter(name='Regression', x=df["Year"], y=pred2, mode='lines'))
+fig2.update_layout(title='Linear regression 2',
+                  yaxis_zeroline=False, xaxis_zeroline=False)
+fig2.update_xaxes(title_text="Year")
+fig2.update_yaxes(title_text="Selling_Price")
+
+
 
 app.layout = html.Div(children=[
     html.H1(children='Cardheko Dashboard'),
